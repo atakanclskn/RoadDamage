@@ -1,11 +1,12 @@
 """
-YOLO26 Model Eğitici
+YOLO26 Model Egitici
 ====================
-Ultralytics YOLO26 modeli ile object detection/segmentation eğitimi.
+Ultralytics YOLO26 modeli ile object detection/segmentation egitimi.
 """
 
 from ultralytics import YOLO
 from models.base import BaseTrainer
+from config import RUNS_DIR, WEIGHTS_DIR
 
 
 class YOLO26Trainer(BaseTrainer):
@@ -14,17 +15,17 @@ class YOLO26Trainer(BaseTrainer):
     DEFAULT_BATCH_SIZE = 48
 
     def setup_model(self, **kwargs):
-        """YOLO modelini yükler."""
+        """YOLO modelini yukler."""
         weight = kwargs.get("weight", "yolo26s.pt")
         weight_path = self.get_weight_path(weight)
         self.model = YOLO(weight_path)
         print(f"[+] Model yuklendi: {weight_path}")
 
     def run_training(self, **kwargs):
-        """YOLO eğitimini başlatır."""
+        """YOLO egitimini baslatir."""
         dataset_yaml = kwargs.get("dataset_yaml")
         if not dataset_yaml:
-            raise ValueError("YOLO eğitimi için 'dataset_yaml' parametresi gerekli (data.yaml yolu).")
+            raise ValueError("YOLO egitimi icin 'dataset_yaml' parametresi gerekli (data.yaml yolu).")
 
         experiment_name = kwargs.get("experiment_name", "yolo26_experiment")
 
@@ -36,6 +37,7 @@ class YOLO26Trainer(BaseTrainer):
             device=self.device,
             patience=kwargs.get("patience", 25),
             optimizer=kwargs.get("optimizer", "MuSGD"),
+            project=str(RUNS_DIR / self.MODEL_NAME),
             name=experiment_name,
             val=kwargs.get("val", True),
             plots=kwargs.get("plots", True),
