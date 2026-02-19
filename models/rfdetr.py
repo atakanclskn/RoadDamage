@@ -84,7 +84,7 @@ if __name__ == "__main__":
     trainer = RFDETRTrainer()
     trainer.train(
         size="nano",
-        dataset_dir=r"C:\projects\RoadDamage\BOX-TEST-1-3",
+        dataset_dir=r"C:\projects\RoadDamage\datasets\BOX-TEST-1-3(COCO)",
         epochs=100,
         batch_size=16,
         grad_accum_steps=4,

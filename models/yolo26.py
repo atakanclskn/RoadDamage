@@ -65,7 +65,7 @@ if __name__ == "__main__":
     trainer = YOLO26Trainer()
     trainer.train(
         weight="yolo26s.pt",
-        dataset_yaml=r"C:\projects\RoadDamage\BOX-TEST-1-2\data.yaml",
+        dataset_yaml=r"C:\projects\RoadDamage\datasets\BOX-TEST-1-3\data.yaml",
         epochs=100,
         imgsz=640,
         batch_size=48,

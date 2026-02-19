@@ -69,7 +69,7 @@ if __name__ == "__main__":
     trainer = RFDETRSegTrainer()
     trainer.train(
         size="small",
-        dataset_dir=r"C:\projects\RoadDamage\SEG-TEST-1-1",
+        dataset_dir=r"C:\projects\RoadDamage\datasets\SEG-TEST-1-1(COCO)",
         epochs=100,
         batch_size=12,
         grad_accum_steps=4,

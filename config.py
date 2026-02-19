@@ -41,13 +41,13 @@ ROBOFLOW_PROJECTS = {
     "seg-test-1": {
         "project_name": "seg-test-1",
         "version": 1,
-        "formats": ["coco", "yolov8"],  # Indirilebilecek formatlar
+        "formats": ["coco", "yolov26"],  # Indirilebilecek formatlar
         "description": "Segmentation dataset (cover-kapak, crack-catlak, pothole-cukur)",
     },
     "box-test-1": {
         "project_name": "box-test-1",
         "version": 3,
-        "formats": ["coco", "yolov8"],
+        "formats": ["coco", "yolov26"],
         "description": "Object detection dataset",
     },
 }
