@@ -20,6 +20,48 @@ from config import (
     DATASETS_DIR,
 )
 
+# ================================================================
+# ROBOFLOW EXPORT FORMATLARI
+# ================================================================
+# 1-2: en cok kullandiklarimiz, 3: digerleri acar
+POPULAR_FORMATS = [
+    ("coco", "COCO JSON           (RF-DETR, Detectron2, vs.)"),
+    ("yolov8", "YOLOv8 PyTorch TXT   (YOLO26, YOLO11, YOLOv8, YOLOv5)"),
+]
+
+ALL_FORMATS = [
+    ("coco",                "COCO JSON"),
+    ("yolov8",              "YOLOv8 PyTorch TXT (YOLO26/11/8/5)"),
+    ("yolov5",              "YOLOv5 PyTorch TXT"),
+    ("yolov7",              "YOLOv7 PyTorch TXT"),
+    ("yolov9",              "YOLOv9 PyTorch TXT"),
+    ("yolov10",             "YOLOv10 PyTorch TXT"),
+    ("yolov12",             "YOLOv12 PyTorch TXT"),
+    ("yolov8-obb",          "YOLOv8 Oriented Bounding Boxes"),
+    ("yolov5-obb",          "YOLOv5 Oriented Bounding Boxes"),
+    ("darknet",             "YOLO Darknet TXT"),
+    ("voc",                 "Pascal VOC XML"),
+    ("tfrecord",            "TensorFlow TFRecord"),
+    ("createml",            "Apple CreateML JSON"),
+    ("csv",                 "TensorFlow Object Detection CSV"),
+    ("retinanet",           "RetinaNet Keras CSV"),
+    ("multiclass",          "Multiclass Classification CSV"),
+    ("clip",                "OpenAI CLIP Classification"),
+    ("mt-yolov6",           "MT-YOLOv6"),
+    ("scaled-yolov4",       "Scaled-YOLOv4 TXT"),
+    ("yolov4",              "YOLOv4 PyTorch TXT"),
+    ("florence2",           "Florence-2"),
+    ("paligemma",           "PaliGemma JSONL"),
+    ("segment-anything-2",  "Segment Anything 2"),
+    ("openai",              "OpenAI GPT-4o JSONL"),
+    ("sagemaker",           "AWS SageMaker GroundTruth"),
+    ("automl",              "Google Cloud AutoML Vision CSV"),
+]
+
+
+# ================================================================
+# YARDIMCI
+# ================================================================
 
 def check_api_key():
     """API key kontrolu."""
@@ -29,6 +71,50 @@ def check_api_key():
         print("    Ornek: .env.example dosyasini kopyala.")
         sys.exit(1)
 
+
+def pick_number(prompt, max_val):
+    """Kullanicidan sayi sec."""
+    while True:
+        try:
+            val = int(input(prompt))
+            if 1 <= val <= max_val:
+                return val
+            print(f"  [X] 1-{max_val} arasi bir sayi gir.")
+        except ValueError:
+            print("  [X] Gecerli bir sayi gir.")
+
+
+def pick_format():
+    """Format secim menusu: 1-2 populer, 3 diger."""
+    print("\n  Format sec:\n")
+    for i, (code, desc) in enumerate(POPULAR_FORMATS, 1):
+        print(f"  [{i}] {desc}")
+    print(f"  [{len(POPULAR_FORMATS)+1}] Diger formatlar...")
+
+    choice = pick_number(
+        f"\n  Secimin (1-{len(POPULAR_FORMATS)+1}): ",
+        len(POPULAR_FORMATS) + 1
+    )
+
+    # Populer seceneklerden biri
+    if choice <= len(POPULAR_FORMATS):
+        return POPULAR_FORMATS[choice - 1][0]
+
+    # Diger: tum listeyi goster
+    print("\n  Tum formatlar:\n")
+    for i, (code, desc) in enumerate(ALL_FORMATS, 1):
+        print(f"  [{i:>2}] {code:<25} {desc}")
+
+    fmt_choice = pick_number(
+        f"\n  Secimin (1-{len(ALL_FORMATS)}): ",
+        len(ALL_FORMATS)
+    )
+    return ALL_FORMATS[fmt_choice - 1][0]
+
+
+# ================================================================
+# INDIRME
+# ================================================================
 
 def download_dataset(project_key: str, export_format: str = "coco"):
     """Tek bir projeyi indirir."""
@@ -70,6 +156,10 @@ def download_all():
                 print(f"  [!] {key} ({fmt}) indirilemedi: {e}")
 
 
+# ================================================================
+# INTERAKTIF MENU
+# ================================================================
+
 def interactive_menu():
     """Interaktif indirme menusu."""
     check_api_key()
@@ -85,14 +175,10 @@ def interactive_menu():
         print(f"  [{i}] {key:<20} {info['description']}")
     print(f"  [{len(projects)+1}] Tumunu indir")
 
-    while True:
-        try:
-            choice = int(input(f"\n  Secimin (1-{len(projects)+1}): "))
-            if 1 <= choice <= len(projects) + 1:
-                break
-            print(f"  [X] 1-{len(projects)+1} arasi bir sayi gir.")
-        except ValueError:
-            print("  [X] Gecerli bir sayi gir.")
+    choice = pick_number(
+        f"\n  Secimin (1-{len(projects)+1}): ",
+        len(projects) + 1
+    )
 
     # Tumunu indir
     if choice == len(projects) + 1:
@@ -100,35 +186,22 @@ def interactive_menu():
         download_all()
         return
 
-    # Tek proje secildi
+    # Tek proje secildi - format sec
     selected_key = projects[choice - 1][0]
-    selected_info = projects[choice - 1][1]
-
-    # Format sec
-    formats = selected_info["formats"]
-    print(f"\n  Format sec:\n")
-    for i, fmt in enumerate(formats, 1):
-        print(f"  [{i}] {fmt}")
-
-    while True:
-        try:
-            fmt_choice = int(input(f"\n  Secimin (1-{len(formats)}): "))
-            if 1 <= fmt_choice <= len(formats):
-                break
-            print(f"  [X] 1-{len(formats)} arasi bir sayi gir.")
-        except ValueError:
-            print("  [X] Gecerli bir sayi gir.")
-
-    selected_format = formats[fmt_choice - 1]
+    selected_format = pick_format()
 
     # Indir
     download_dataset(selected_key, selected_format)
 
 
+# ================================================================
+# GIRIS NOKTASI
+# ================================================================
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Roboflow'dan dataset indir")
     parser.add_argument("--project", type=str, help="Proje adi (seg-test-1, box-test-1)")
-    parser.add_argument("--format", type=str, default="coco", help="Format (coco, yolo26)")
+    parser.add_argument("--format", type=str, default="coco", help="Format (coco, yolov8, voc, vs.)")
     parser.add_argument("--all", action="store_true", help="Tum projeleri indir")
 
     args = parser.parse_args()
