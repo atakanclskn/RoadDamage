@@ -1,0 +1,53 @@
+# ==============================================================
+# RoadDamage .gitignore
+# ==============================================================
+
+# ======================== DATASETS ============================
+# Dataset klasörleri git'e yüklenmez (çok büyük)
+datasets/
+BOX-TEST-*/
+SEG-TEST-*/
+
+# ======================== WEIGHTS =============================
+# Pretrained ve eğitilmiş model ağırlıkları
+weights/
+*.pt
+*.pth
+runs/
+
+# ======================== GİZLİ DOSYALAR ======================
+# API anahtarları ve ortam değişkenleri
+.env
+!.env.example
+
+# ======================== PYTHON ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtualenv
+venv/
+.venv/
+env/
+
+# ======================== IDE =================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ======================== JUPYTER =============================
+.ipynb_checkpoints/
+*.ipynb
+
+# ======================== LOGS ================================
+*.log
+tensorboard_logs/

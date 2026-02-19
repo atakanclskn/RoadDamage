@@ -1,0 +1,6 @@
+# RoadDamage - Gerekli Python Paketleri
+ultralytics
+rfdetr
+roboflow
+python-dotenv
+torch
