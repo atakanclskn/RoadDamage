@@ -39,9 +39,9 @@ def get_trainer(model_name: str):
 
 def list_models():
     """Kullanılabilir modellerin listesini yazdırır."""
-    print("\n📦 Kullanılabilir Modeller:")
+    print("\nKullanilabilir Modeller:")
     print("=" * 50)
     for name, trainer_cls in AVAILABLE_MODELS.items():
         desc = getattr(trainer_cls, "DESCRIPTION", "")
-        print(f"  • {name:<15} {desc}")
+        print(f"  - {name:<15} {desc}")
     print("=" * 50)

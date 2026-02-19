@@ -39,7 +39,7 @@ class RFDETRTrainer(BaseTrainer):
         size = kwargs.get("size", "nano")
         model_cls = _get_rfdetr_class(size)
         self.model = model_cls()
-        print(f"📦 RF-DETR {size.upper()} modeli yüklendi.")
+        print(f"[+] RF-DETR {size.upper()} modeli yuklendi.")
 
     def run_training(self, **kwargs):
         """RF-DETR eğitimini başlatır."""

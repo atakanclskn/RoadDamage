@@ -36,7 +36,7 @@ class RFDETRSegTrainer(BaseTrainer):
         size = kwargs.get("size", "small")
         model_cls = _get_rfdetr_seg_class(size)
         self.model = model_cls()
-        print(f"📦 RF-DETR-SEG {size.upper()} modeli yüklendi.")
+        print(f"[+] RF-DETR-SEG {size.upper()} modeli yuklendi.")
 
     def run_training(self, **kwargs):
         """RF-DETR Segmentation eğitimini başlatır."""

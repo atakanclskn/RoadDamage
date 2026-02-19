@@ -22,8 +22,8 @@ def download_dataset(project_key: str, export_format: str = "coco"):
     """Tek bir projeyi indirir."""
     if ROBOFLOW_API_KEY is None:
         raise ValueError(
-            "❌ ROBOFLOW_API_KEY bulunamadı!\n"
-            "   .env dosyasına API anahtarını ekle veya .env.example dosyasını kopyala."
+            "ROBOFLOW_API_KEY bulunamadi!\n"
+            "   .env dosyasina API anahtarini ekle veya .env.example dosyasini kopyala."
         )
 
     project_info = ROBOFLOW_PROJECTS.get(project_key)
@@ -33,8 +33,8 @@ def download_dataset(project_key: str, export_format: str = "coco"):
             f"Bilinmeyen proje: '{project_key}'. Mevcut projeler: {available}"
         )
 
-    print(f"\n📥 İndiriliyor: {project_key} ({export_format} formatında)")
-    print(f"   Açıklama: {project_info['description']}")
+    print(f"\n[>] Indiriliyor: {project_key} ({export_format} formatinda)")
+    print(f"    Aciklama: {project_info['description']}")
 
     rf = Roboflow(api_key=ROBOFLOW_API_KEY)
     project = rf.workspace(ROBOFLOW_WORKSPACE).project(project_info["project_name"])
@@ -43,7 +43,7 @@ def download_dataset(project_key: str, export_format: str = "coco"):
     # datasets/ klasörüne indir
     dataset = version.download(export_format, location=str(DATASETS_DIR / f"{project_key}-v{project_info['version']}({export_format})"))
     
-    print(f"✅ Tamamlandı: {project_key}")
+    print(f"[OK] Tamamlandi: {project_key}")
     return dataset
 
 
@@ -54,7 +54,7 @@ def download_all():
             try:
                 download_dataset(key, fmt)
             except Exception as e:
-                print(f"⚠️  {key} ({fmt}) indirilemedi: {e}")
+                print(f"[!] {key} ({fmt}) indirilemedi: {e}")
 
 
 if __name__ == "__main__":

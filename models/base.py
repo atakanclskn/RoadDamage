@@ -38,10 +38,10 @@ class BaseTrainer(ABC):
         """GPU/CPU algılama."""
         if torch.cuda.is_available():
             device_name = torch.cuda.get_device_name(0)
-            print(f"🖥️  GPU Algılandı: {device_name}")
+            print(f"[GPU] Algilandi: {device_name}")
             return 0
         else:
-            print("⚠️  GPU bulunamadı, CPU kullanılacak.")
+            print("[!] GPU bulunamadi, CPU kullanilacak.")
             return "cpu"
 
     def get_output_dir(self, experiment_name: str) -> str:
@@ -89,7 +89,7 @@ class BaseTrainer(ABC):
 
     def train(self, **kwargs):
         """Eğitim pipeline'ını çalıştırır."""
-        print(f"\n🚀 {self.MODEL_NAME.upper()} eğitimi başlatılıyor...")
+        print(f"\n>>> {self.MODEL_NAME.upper()} egitimi baslatiliyor...")
         print("=" * 60)
         self.setup_model(**kwargs)
         return self.run_training(**kwargs)

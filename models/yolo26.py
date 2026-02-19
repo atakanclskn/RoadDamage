@@ -18,7 +18,7 @@ class YOLO26Trainer(BaseTrainer):
         weight = kwargs.get("weight", "yolo26s.pt")
         weight_path = self.get_weight_path(weight)
         self.model = YOLO(weight_path)
-        print(f"📦 Model yüklendi: {weight_path}")
+        print(f"[+] Model yuklendi: {weight_path}")
 
     def run_training(self, **kwargs):
         """YOLO eğitimini başlatır."""

@@ -1,7 +1,7 @@
 """
-🛣️ RoadDamage - Merkezi Eğitim Başlatıcı
-==========================================
-Tek dosyadan istediğin modeli ve dataseti seçerek eğitim başlat.
+RoadDamage - Merkezi Egitim Baslatici
+======================================
+Tek dosyadan istedigin modeli ve dataseti secerek egitim baslat.
 
 Kullanım:
     python train.py                              # İnteraktif menü
@@ -66,7 +66,7 @@ def scan_weights():
 def pick_from_list(items, item_type="öğe"):
     """Kullanıcıya numaralı liste gösterip seçim yaptırır."""
     if not items:
-        print(f"  ⚠️  Hiç {item_type} bulunamadı.")
+        print(f"  [!] Hic {item_type} bulunamadi.")
         return None
     for i, item in enumerate(items, 1):
         if isinstance(item, dict):
@@ -80,9 +80,9 @@ def pick_from_list(items, item_type="öğe"):
             idx = int(choice) - 1
             if 0 <= idx < len(items):
                 return items[idx]
-            print(f"  ❌ 1 ile {len(items)} arasında bir sayı gir.")
+            print(f"  [X] 1 ile {len(items)} arasinda bir sayi gir.")
         except (ValueError, EOFError):
-            print(f"  ❌ Geçerli bir sayı gir.")
+            print(f"  [X] Gecerli bir sayi gir.")
 
 
 def ask_int(prompt, default):
@@ -93,7 +93,7 @@ def ask_int(prompt, default):
     try:
         return int(val)
     except ValueError:
-        print(f"  ⚠️  Geçersiz değer, varsayılan kullanılıyor: {default}")
+        print(f"  [!] Gecersiz deger, varsayilan kullaniliyor: {default}")
         return default
 
 
@@ -105,7 +105,7 @@ def ask_float(prompt, default):
     try:
         return float(val)
     except ValueError:
-        print(f"  ⚠️  Geçersiz değer, varsayılan kullanılıyor: {default}")
+        print(f"  [!] Gecersiz deger, varsayilan kullaniliyor: {default}")
         return default
 
 
@@ -132,11 +132,11 @@ def interactive_menu():
     """Adım adım interaktif eğitim ayarlama menüsü."""
 
     print("\n" + "=" * 60)
-    print("  🛣️  ROAD DAMAGE - EĞİTİM BAŞLATICI")
+    print("  ROAD DAMAGE - EGITIM BASLATICI")
     print("=" * 60)
 
-    # ---- ADIM 1: Model Seçimi ----
-    print("\n📦 ADIM 1: Model Seç")
+    # ---- ADIM 1: Model Secimi ----
+    print("\n[1] ADIM 1: Model Sec")
     model_items = []
     for key, cls in AVAILABLE_MODELS.items():
         desc = getattr(cls, "DESCRIPTION", "")
@@ -146,14 +146,14 @@ def interactive_menu():
     if not selected_model:
         sys.exit(1)
     model_name = selected_model["name"]
-    print(f"  ✅ Seçilen model: {model_name}")
+    print(f"  > Secilen model: {model_name}")
 
-    # ---- ADIM 2: Dataset Seçimi ----
-    print(f"\n📂 ADIM 2: Dataset Seç")
+    # ---- ADIM 2: Dataset Secimi ----
+    print(f"\n[2] ADIM 2: Dataset Sec")
     datasets = scan_datasets()
     if not datasets:
-        print("  ❌ datasets/ klasöründe hiç dataset bulunamadı!")
-        print("  Önce: python download_dataset.py --all")
+        print("  [X] datasets/ klasorunde hic dataset bulunamadi!")
+        print("  Once: python download_dataset.py --all")
         sys.exit(1)
 
     ds_items = []
@@ -166,7 +166,7 @@ def interactive_menu():
     selected_ds = pick_from_list(ds_items, "dataset")
     if not selected_ds:
         sys.exit(1)
-    print(f"  ✅ Seçilen dataset: {selected_ds['name']}")
+    print(f"  > Secilen dataset: {selected_ds['name']}")
 
     # ---- ADIM 3: Model-spesifik ayarlar ----
     kwargs = {}
@@ -175,12 +175,12 @@ def interactive_menu():
         # YOLO: data.yaml lazım
         yaml_path = Path(selected_ds["path"]) / "data.yaml"
         if not yaml_path.exists():
-            print(f"  ❌ {yaml_path} bulunamadı. YOLO için YOLO formatında dataset gerekli.")
+            print(f"  [X] {yaml_path} bulunamadi. YOLO icin YOLO formatinda dataset gerekli.")
             sys.exit(1)
         kwargs["dataset_yaml"] = str(yaml_path)
 
         # Weight seçimi
-        print(f"\n⚖️  ADIM 3: Pretrained Ağırlık Seç")
+        print(f"\n[3] ADIM 3: Pretrained Agirlik Sec")
         weights = [w for w in scan_weights() if "yolo" in w["name"].lower()]
         if weights:
             w_items = [{"label": f"{w['name']:<30} ({w['size_mb']:.0f} MB)", **w} for w in weights]
@@ -194,7 +194,7 @@ def interactive_menu():
         # RF-DETR: COCO formatında dizin lazım
         coco_check = Path(selected_ds["path"]) / "train" / "_annotations.coco.json"
         if not coco_check.exists():
-            print(f"  ⚠️  Uyarı: Bu dataset COCO formatında olmayabilir.")
+            print(f"  [!] Uyari: Bu dataset COCO formatinda olmayabilir.")
         kwargs["dataset_dir"] = selected_ds["path"]
 
         # Boyut seçimi
@@ -204,16 +204,16 @@ def interactive_menu():
             sizes = ["small"]
         
         if len(sizes) > 1:
-            print(f"\n📐 ADIM 3: Model Boyutu Seç")
+            print(f"\n[3] ADIM 3: Model Boyutu Sec")
             size_items = [{"name": s, "label": s.upper()} for s in sizes]
             selected_size = pick_from_list(size_items, "boyut")
             kwargs["size"] = selected_size["name"] if selected_size else sizes[0]
         else:
             kwargs["size"] = sizes[0]
-            print(f"\n  📐 Model boyutu: {sizes[0].upper()} (tek seçenek)")
+            print(f"\n  Model boyutu: {sizes[0].upper()} (tek secenek)")
 
     # ---- ADIM 4: Eğitim Parametreleri ----
-    print(f"\n⚙️  ADIM 4: Eğitim Parametreleri")
+    print(f"\n[4] ADIM 4: Egitim Parametreleri")
     kwargs["epochs"] = ask_int("Epoch sayısı", 100)
     
     default_bs = AVAILABLE_MODELS[model_name].DEFAULT_BATCH_SIZE
@@ -240,7 +240,7 @@ def interactive_menu():
 
     # ---- ÖZET ve ONAY ----
     print("\n" + "=" * 60)
-    print("  📋 EĞİTİM ÖZETİ")
+    print("  EGITIM OZETI")
     print("=" * 60)
     print(f"  Model      : {model_name}")
     print(f"  Dataset    : {selected_ds['name']}")
@@ -254,7 +254,7 @@ def interactive_menu():
         print(f"  Ağırlık    : {kwargs['weight']}")
     print("=" * 60)
 
-    if not ask_yes_no("🚀 Eğitimi başlat?", True):
+    if not ask_yes_no("Egitimi baslat?", True):
         print("  İptal edildi.")
         sys.exit(0)
 
@@ -271,7 +271,7 @@ def interactive_menu():
 def cli_mode():
     """Argparse ile doğrudan CLI'dan çalıştırma."""
     parser = argparse.ArgumentParser(
-        description="🛣️ RoadDamage - Model Eğitim Aracı",
+        description="RoadDamage - Model Egitim Araci",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Örnekler:
@@ -314,12 +314,12 @@ def cli_mode():
     # Sadece --list
     if args.list:
         list_models()
-        print("\n📂 Mevcut Datasetler:")
+        print("\nMevcut Datasetler:")
         for ds in scan_datasets():
-            print(f"  • {ds['name']:<35} [{ds['format_str']}]")
-        print("\n⚖️  Mevcut Ağırlıklar:")
+            print(f"  - {ds['name']:<35} [{ds['format_str']}]")
+        print("\nMevcut Agirliklar:")
         for w in scan_weights():
-            print(f"  • {w['name']:<30} ({w['size_mb']:.0f} MB)")
+            print(f"  - {w['name']:<30} ({w['size_mb']:.0f} MB)")
         sys.exit(0)
 
     # Model belirtilmediyse -> interaktif menüye yönlendir
